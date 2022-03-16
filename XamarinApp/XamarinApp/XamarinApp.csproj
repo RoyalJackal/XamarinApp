@@ -1,0 +1,49 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Models\Feed.cs~RF2fde362.TMP" />
+    <None Remove="ViewModels\cmju4gsn.bf2~" />
+    <None Remove="Views\Fodders\FodderDetailPage.xaml.cs~RFf6f87c.TMP" />
+    <None Remove="Views\Fodders\FoddersPage.xaml.cs~RFdde5b9.TMP" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="sqlite-net-pcl" Version="1.8.116" />
+    <PackageReference Include="SQLiteNetExtensions" Version="2.1.0" />
+    <PackageReference Include="SQLiteNetExtensions.Async" Version="2.1.0" />
+    <PackageReference Include="Xamarin.Forms" Version="5.0.0.2012" />  
+    <PackageReference Include="Xamarin.Essentials" Version="1.6.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Views\Fodders\FoddersPage.xaml.cs">
+      <DependentUpon>FoddersPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\Fodders\FodderDetailPage.xaml.cs">
+      <DependentUpon>FodderDetailPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\Fodders\NewFodderPage.xaml.cs">
+      <DependentUpon>NewFodderPage.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Views\Feeds\NewFeedPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Pets\NewPetPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Pets\PetDetailPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Pets\PetsPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+</Project>
