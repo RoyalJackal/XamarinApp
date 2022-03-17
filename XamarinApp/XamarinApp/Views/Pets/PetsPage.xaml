@@ -4,7 +4,7 @@
              x:Class="XamarinApp.Views.Pets.PetsPage"
              Title="{Binding Title}"
              xmlns:local="clr-namespace:XamarinApp.ViewModels.Pets"  
-             xmlns:model="clr-namespace:XamarinApp.Models"  
+             xmlns:model="clr-namespace:Data.Models;assembly=Data"  
              x:Name="BrowseItemsPage">
 
     <ContentPage.ToolbarItems>

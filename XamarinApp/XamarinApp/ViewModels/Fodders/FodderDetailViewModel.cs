@@ -1,13 +1,16 @@
-﻿using System.Diagnostics;
+﻿using Data.Context;
+using System;
+using System.Diagnostics;
 using Xamarin.Forms;
-using XamarinApp.Models;
 using XamarinApp.Views.Fodders;
 
 namespace XamarinApp.ViewModels.Fodders
 {
     [QueryProperty(nameof(ItemId), nameof(ItemId))]
-    public class FodderDetailViewModel : BaseViewModel
+    class FodderDetailViewModel : BaseViewModel
     {
+        public AppDbContext Db => DependencyService.Get<AppDbContext>();
+
         private string name;
         public string Name
         {
@@ -36,9 +39,7 @@ namespace XamarinApp.ViewModels.Fodders
 
         public async void LoadItemId(int itemId)
         {
-            var item = await App.Db.Table<Fodder>()
-                .Where(i => i.Id == itemId)
-                .FirstOrDefaultAsync();
+            var item = await Db.Fodders.FindAsync(itemId);
 
             if (item == null)
                 Debug.WriteLine("Failed to Load Item");

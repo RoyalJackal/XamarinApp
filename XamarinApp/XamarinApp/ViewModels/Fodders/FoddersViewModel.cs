@@ -1,16 +1,19 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Xamarin.Forms;
-using XamarinApp.Models;
-using XamarinApp.Views;
+using Data.Context;
+using Data.Models;
 using XamarinApp.Views.Fodders;
 
 namespace XamarinApp.ViewModels.Fodders
 {
-    public class FoddersViewModel : BaseViewModel
+    class FoddersViewModel : BaseViewModel
     {
+        public AppDbContext Db => DependencyService.Get<AppDbContext>();
+
         private Fodder _selectedItem;
 
         public ObservableCollection<Fodder> Items { get; }
@@ -36,7 +39,8 @@ namespace XamarinApp.ViewModels.Fodders
             try
             {
                 Items.Clear();
-                var items = await App.Db.Table<Fodder>().ToListAsync();
+                var items = await Db.Fodders
+                    .ToListAsync();
                 foreach (var item in items)
                     Items.Add(item);
             }

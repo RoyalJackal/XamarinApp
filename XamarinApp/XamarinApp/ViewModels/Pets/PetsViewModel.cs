@@ -1,15 +1,19 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Xamarin.Forms;
-using XamarinApp.Models;
+using Data.Context;
+using Data.Models;
 using XamarinApp.Views.Pets;
 
 namespace XamarinApp.ViewModels.Pets
 {
-    public class PetsViewModel : BaseViewModel
+    class PetsViewModel : BaseViewModel
     {
+        public AppDbContext Db => DependencyService.Get<AppDbContext>();
+
         private Pet _selectedItem;
 
         public ObservableCollection<Pet> Items { get; }
@@ -35,7 +39,7 @@ namespace XamarinApp.ViewModels.Pets
             try
             {
                 Items.Clear();
-                var items = await App.Db.Table<Pet>().ToListAsync();
+                var items = await Db.Pets.ToListAsync();
                 foreach (var item in items)
                     Items.Add(item);
             }

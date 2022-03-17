@@ -3,21 +3,21 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Xamarin.Forms;
-using XamarinApp.Models;
 using XamarinApp.ViewModels.Feeds;
 using XamarinApp.Views.Feeds;
 using XamarinApp.Views.Pets;
-using SQLiteNetExtensions.Extensions;
-using SQLiteNetExtensions;
-using SQLiteNetExtensionsAsync.Extensions;
-using SQLiteNetExtensionsAsync;
-
+using Data.Context;
+using Data.Models;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace XamarinApp.ViewModels.Pets
 {
     [QueryProperty(nameof(ItemId), nameof(ItemId))]
     class PetDetailViewModel : BaseViewModel
     {
+        public AppDbContext Db => DependencyService.Get<AppDbContext>();
+
         private string name;
         public string Name
         {
@@ -57,9 +57,7 @@ namespace XamarinApp.ViewModels.Pets
 
         public async void LoadItemId(int itemId)
         {
-            var item = await App.Db.Table<Pet>()
-                .Where(i => i.Id == itemId)
-                .FirstOrDefaultAsync();
+            var item = await Db.Pets.FindAsync(itemId);
 
             if (item == null)
                 Debug.WriteLine("Failed to Load Item");
@@ -91,8 +89,10 @@ namespace XamarinApp.ViewModels.Pets
             try
             {
                 Items.Clear();
-                //var items = await App.Db.GetAllWithChildrenAsync<Feed>();
-                var items = await App.Db.Table<Feed>().Where(x => x.PetId == ItemId).ToListAsync();
+                var items = await Db.Feeds
+                    .Include(x => x.Pet)
+                    .Where(x => x.Pet.Id == ItemId)
+                    .ToListAsync();
                 foreach (var item in items)
                     Items.Add(item);
             }

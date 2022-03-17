@@ -1,12 +1,16 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using Xamarin.Forms;
-using XamarinApp.Models;
+using Data.Context;
+using Data.Models;
 
 namespace XamarinApp.ViewModels.Pets
 {
     [QueryProperty(nameof(ItemId), nameof(ItemId))]
     class NewPetViewModel : BaseViewModel
     {
+        public AppDbContext Db => DependencyService.Get<AppDbContext>();
+
         private string name;
         public string Name
         {
@@ -49,9 +53,7 @@ namespace XamarinApp.ViewModels.Pets
 
         public async void LoadItemId(int itemId)
         {
-            var item = await App.Db.Table<Pet>()
-                .Where(i => i.Id == itemId)
-                .FirstOrDefaultAsync();
+            var item = await Db.Pets.FindAsync(itemId);
 
             if (item == null)
                 Debug.WriteLine("Failed to Load Item");
@@ -72,18 +74,23 @@ namespace XamarinApp.ViewModels.Pets
         }
 
         private async void OnSave()
-        {
-            var newItem = new Pet()
+        {            
+            if (ItemId == default)
             {
-                Id = ItemId,
-                Name = Name,
-                Breed = Breed
-            };
-
-            if (newItem.Id != 0)
-                await App.Db.UpdateAsync(newItem);
+                var pet = new Pet()
+                {
+                    Name = Name,
+                    Breed = Breed
+                };
+                await Db.AddAsync(pet);
+            }
             else
-                await App.Db.InsertAsync(newItem);
+            {
+                var pet = await Db.Pets.FindAsync(ItemId);
+                pet.Name = Name;
+                pet.Breed = Breed;
+            }
+            await Db.SaveChangesAsync();
 
             // This will pop the current page off the navigation stack
             await Shell.Current.GoToAsync("..");

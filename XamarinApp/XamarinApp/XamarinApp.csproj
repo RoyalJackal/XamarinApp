@@ -6,18 +6,23 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Models\Feed.cs~RF2fde362.TMP" />
     <None Remove="ViewModels\cmju4gsn.bf2~" />
     <None Remove="Views\Fodders\FodderDetailPage.xaml.cs~RFf6f87c.TMP" />
     <None Remove="Views\Fodders\FoddersPage.xaml.cs~RFdde5b9.TMP" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.23" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.23" />
     <PackageReference Include="sqlite-net-pcl" Version="1.8.116" />
     <PackageReference Include="SQLiteNetExtensions" Version="2.1.0" />
     <PackageReference Include="SQLiteNetExtensions.Async" Version="2.1.0" />
     <PackageReference Include="Xamarin.Forms" Version="5.0.0.2012" />  
     <PackageReference Include="Xamarin.Essentials" Version="1.6.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Data\Data.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,5 +1,5 @@
 ﻿using Xamarin.Forms;
-using XamarinApp.Models;
+using Data.Models;
 using XamarinApp.ViewModels.Fodders;
 
 namespace XamarinApp.Views.Fodders

@@ -1,13 +1,18 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Diagnostics;
+using System.Linq;
 using Xamarin.Forms;
-using XamarinApp.Models;
+using Data.Context;
+using Data.Models;
 
 namespace XamarinApp.ViewModels.Fodders
 {
     [QueryProperty(nameof(ItemId), nameof(ItemId))]
-    public class NewFodderViewModel : BaseViewModel
+    class NewFodderViewModel : BaseViewModel
     {
+        public AppDbContext Db => DependencyService.Get<AppDbContext>();
+
         private string name;
 
         public string Name
@@ -33,7 +38,7 @@ namespace XamarinApp.ViewModels.Fodders
 
         public async void LoadItemId(int itemId)
         {
-            var item = await App.Db.Table<Fodder>()
+            var item = await Db.Fodders
                 .Where(i => i.Id == itemId)
                 .FirstOrDefaultAsync();
 
@@ -67,17 +72,21 @@ namespace XamarinApp.ViewModels.Fodders
         }
 
         private async void OnSave()
-        {
-            var newItem = new Fodder()
+        {           
+            if (ItemId == default)
             {
-                Id = ItemId,
-                Name = Name
-            };
-
-            if (newItem.Id != 0)
-                await App.Db.UpdateAsync(newItem);
+                var fodder = new Fodder()
+                {
+                    Name = Name
+                };
+                await Db.AddAsync(fodder);
+            }
             else
-                await App.Db.InsertAsync(newItem);
+            {
+                var fodder = await Db.Fodders.FindAsync(ItemId);
+                fodder.Name = Name;
+            }
+            await Db.SaveChangesAsync();
 
             // This will pop the current page off the navigation stack
             await Shell.Current.GoToAsync("..");

@@ -1,10 +1,11 @@
-﻿using SQLiteNetExtensionsAsync.Extensions;
+﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Xamarin.Forms;
-using XamarinApp.Models;
+using Data.Context;
+using Data.Models;
 
 namespace XamarinApp.ViewModels.Feeds
 {
@@ -12,6 +13,8 @@ namespace XamarinApp.ViewModels.Feeds
     [QueryProperty(nameof(PetId), nameof(PetId))]
     class NewFeedViewModel : BaseViewModel
     {
+        public AppDbContext Db => DependencyService.Get<AppDbContext>();
+
         private TimeSpan time;
         public TimeSpan Time
         {
@@ -83,9 +86,7 @@ namespace XamarinApp.ViewModels.Feeds
 
         public async void LoadItemId(int itemId)
         {
-            var item = await App.Db.Table<Feed>()
-                .Where(i => i.Id == itemId)
-                .FirstOrDefaultAsync();
+            var item = await Db.Feeds.Include(x => x.Fodder).FirstOrDefaultAsync(x => x.Id == itemId);
 
             if (item == null)
                 Debug.WriteLine("Failed to Load Item");
@@ -108,19 +109,26 @@ namespace XamarinApp.ViewModels.Feeds
 
         private async void OnSave()
         {
-            var newItem = new Feed()
+            if (ItemId == default)
             {
-                Id = ItemId,
-                Time = Time,
-                Fodder = Fodder,
-                Amount = Amount,
-                PetId = PetId
-            };
-
-            if (newItem.Id != 0)
-                await App.Db.UpdateWithChildrenAsync(newItem);
+                var pet = await Db.Pets.FindAsync(petId);
+                var feed = new Feed()
+                {
+                    Time = Time,
+                    Fodder = Fodder,
+                    Amount = Amount,
+                    Pet = pet
+                };
+                await Db.AddAsync(feed);
+            }
             else
-                await App.Db.InsertWithChildrenAsync(newItem);
+            {
+                var feed = await Db.Feeds.FindAsync(ItemId);
+                feed.Time = Time;
+                feed.Fodder = Fodder;
+                feed.Amount = Amount;
+            }
+            await Db.SaveChangesAsync();
 
             // This will pop the current page off the navigation stack
             await Shell.Current.GoToAsync("..");
@@ -133,7 +141,7 @@ namespace XamarinApp.ViewModels.Feeds
             try
             {
                 PickerItems.Clear();
-                var items = await App.Db.Table<Fodder>().ToListAsync();
+                var items = await Db.Fodders.ToListAsync();
                 foreach (var item in items)
                     PickerItems.Add(item);
             }

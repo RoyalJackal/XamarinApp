@@ -4,7 +4,7 @@
              x:Class="XamarinApp.Views.Fodders.FoddersPage"
              Title="{Binding Title}"
              xmlns:local="clr-namespace:XamarinApp.ViewModels.Fodders"  
-             xmlns:model="clr-namespace:XamarinApp.Models"  
+             xmlns:model="clr-namespace:Data.Models;assembly=Data"  
              x:Name="BrowseItemsPage">
 
     <ContentPage.ToolbarItems>
