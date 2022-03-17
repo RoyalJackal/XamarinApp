@@ -15,6 +15,7 @@ namespace XamarinApp
             Routing.RegisterRoute(nameof(NewFodderPage), typeof(NewFodderPage));
             Routing.RegisterRoute(nameof(PetDetailPage), typeof(PetDetailPage));
             Routing.RegisterRoute(nameof(NewPetPage), typeof(NewPetPage));
+            Routing.RegisterRoute(nameof(FeedDetailPage), typeof(FeedDetailPage));
             Routing.RegisterRoute(nameof(NewFeedPage), typeof(NewFeedPage));
 
         }

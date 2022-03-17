@@ -10,6 +10,7 @@ namespace XamarinApp.Views.Pets
 
         public NewPetPage()
         {
+            Shell.Current.FlyoutBehavior = FlyoutBehavior.Disabled;
             InitializeComponent();
             BindingContext = new NewPetViewModel();
         }

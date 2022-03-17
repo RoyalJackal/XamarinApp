@@ -10,6 +10,7 @@ namespace XamarinApp.Views.Fodders
 
         public NewFodderPage()
         {
+            Shell.Current.FlyoutBehavior = FlyoutBehavior.Disabled;
             InitializeComponent();
             BindingContext = new NewFodderViewModel();
         }

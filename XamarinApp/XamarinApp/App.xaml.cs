@@ -1,5 +1,6 @@
 ﻿using Xamarin.Forms;
 using Data.Context;
+using Xamarin.Essentials;
 
 namespace XamarinApp
 {
@@ -17,7 +18,6 @@ namespace XamarinApp
         protected override void OnStart()
         {
         }
-
         protected override void OnSleep()
         {
         }

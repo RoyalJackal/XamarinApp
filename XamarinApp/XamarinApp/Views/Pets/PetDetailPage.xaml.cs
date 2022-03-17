@@ -16,6 +16,7 @@ namespace XamarinApp.Views.Pets
 
         protected override void OnAppearing()
         {
+            Shell.Current.FlyoutBehavior = FlyoutBehavior.Disabled;
             base.OnAppearing();
             _viewModel.OnAppearing();
         }

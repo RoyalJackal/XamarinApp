@@ -91,6 +91,7 @@ namespace XamarinApp.ViewModels.Pets
                 Items.Clear();
                 var items = await Db.Feeds
                     .Include(x => x.Pet)
+                    .Include(x => x.Fodder)
                     .Where(x => x.Pet.Id == ItemId)
                     .ToListAsync();
                 foreach (var item in items)
@@ -127,11 +128,11 @@ namespace XamarinApp.ViewModels.Pets
             await Shell.Current.GoToAsync($"{nameof(NewFeedPage)}?{nameof(NewFeedViewModel.PetId)}={ItemId}");
         }
 
-        void OnItemSelected(Feed item)
+        async void OnItemSelected(Feed item)
         {
             if (item == null)
                 return;
-            //await Shell.Current.GoToAsync($"{nameof(FeedDetailPage)}?{nameof(FeedDetailViewModel.ItemId)}={item.Id}");
+            await Shell.Current.GoToAsync($"{nameof(FeedDetailPage)}?{nameof(FeedDetailViewModel.ItemId)}={item.Id}");
         }
 
         #endregion
