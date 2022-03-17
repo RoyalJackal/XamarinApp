@@ -1,9 +1,10 @@
 ﻿using Xamarin.Forms;
 using XamarinApp.ViewModels.Pets;
+using XamarinApp.Views.Base;
 
 namespace XamarinApp.Views.Pets
 {
-    public partial class PetDetailPage : ContentPage
+    public partial class PetDetailPage : BasePage
     {
         PetDetailViewModel _viewModel;
 

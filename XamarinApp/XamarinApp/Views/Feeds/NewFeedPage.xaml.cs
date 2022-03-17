@@ -1,9 +1,10 @@
 ﻿using Xamarin.Forms;
 using XamarinApp.ViewModels.Feeds;
+using XamarinApp.Views.Base;
 
 namespace XamarinApp.Views.Feeds
 {
-    public partial class NewFeedPage : ContentPage
+    public partial class NewFeedPage : BasePage
     {
         NewFeedViewModel _viewModel;
 

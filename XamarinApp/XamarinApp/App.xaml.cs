@@ -15,8 +15,11 @@ namespace XamarinApp
             MainPage = new AppShell();
         }
 
-        protected override void OnStart()
+        protected async override void OnStart()
         {
+            var uri = Preferences.Get("lastPage", Shell.Current.CurrentState.Location.ToString());
+            if (uri != null)
+                await Shell.Current.GoToAsync(uri);
         }
         protected override void OnSleep()
         {

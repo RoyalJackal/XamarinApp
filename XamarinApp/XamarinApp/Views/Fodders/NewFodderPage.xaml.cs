@@ -1,10 +1,11 @@
 ﻿using Xamarin.Forms;
 using Data.Models;
 using XamarinApp.ViewModels.Fodders;
+using XamarinApp.Views.Base;
 
 namespace XamarinApp.Views.Fodders
 {
-    public partial class NewFodderPage : ContentPage
+    public partial class NewFodderPage : BasePage
     {
         public Fodder Item { get; set; }
 
