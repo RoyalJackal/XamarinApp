@@ -1,14 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Xamarin.Forms;
-using XamarinApp.Views;
+﻿using Xamarin.Forms;
+using XamarinApp.Services;
+using XamarinApp.ViewModels.Base;
+using XamarinApp.Views.Auth;
+using XamarinApp.Views.Pets;
 
 namespace XamarinApp.ViewModels
 {
     public class LoginViewModel : BaseViewModel
     {
+        public AuthService Auth => DependencyService.Get<AuthService>();
+        public AlertService Alerts => DependencyService.Get<AlertService>();
+
+
         public Command LoginCommand { get; }
+
+        private string username;
+
+        public string Username
+        {
+            get => username;
+            set => SetProperty(ref username, value);
+        }
+
+        private string password;
+
+        public string Password
+        {
+            get => password;
+            set => SetProperty(ref password, value);
+        }
 
         public LoginViewModel()
         {
@@ -17,8 +37,21 @@ namespace XamarinApp.ViewModels
 
         private async void OnLoginClicked(object obj)
         {
-            // Prefixing with `//` switches to a different navigation stack instead of pushing to the active one
-            await Shell.Current.GoToAsync($"//{nameof(AboutPage)}");
+            IsBusy = true;
+            var result = await Auth.SignIn(Username, Password);
+            if (result)
+            {
+                var shell = (AppShell)Shell.Current;
+                var shellViewModel = (AppShellViewModel)shell.BindingContext;
+                shellViewModel.IsAuthenticated = true;
+                IsBusy = false;
+                await Shell.Current.GoToAsync($"//{nameof(PetsPage)}");
+            }
+            else
+            {
+                IsBusy = false;
+                await Alerts.ShowErrorAsync("Ошибка при входе.");
+            }
         }
     }
 }

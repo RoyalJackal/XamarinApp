@@ -2,6 +2,7 @@
 using System;
 using System.Diagnostics;
 using Xamarin.Forms;
+using XamarinApp.ViewModels.Base;
 using XamarinApp.Views.Fodders;
 
 namespace XamarinApp.ViewModels.Fodders

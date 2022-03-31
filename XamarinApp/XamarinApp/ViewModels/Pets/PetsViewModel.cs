@@ -7,6 +7,7 @@ using Xamarin.Forms;
 using Data.Context;
 using Data.Models;
 using XamarinApp.Views.Pets;
+using XamarinApp.ViewModels.Base;
 
 namespace XamarinApp.ViewModels.Pets
 {

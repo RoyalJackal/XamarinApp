@@ -10,6 +10,7 @@ using Data.Context;
 using Data.Models;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using XamarinApp.ViewModels.Base;
 
 namespace XamarinApp.ViewModels.Pets
 {

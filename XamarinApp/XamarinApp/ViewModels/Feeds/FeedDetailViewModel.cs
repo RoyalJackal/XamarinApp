@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 using Xamarin.Forms;
+using XamarinApp.ViewModels.Base;
 using XamarinApp.Views.Feeds;
 
 namespace XamarinApp.ViewModels.Feeds

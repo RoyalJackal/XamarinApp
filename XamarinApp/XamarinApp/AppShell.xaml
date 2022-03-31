@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Shell xmlns="http://xamarin.com/schemas/2014/forms" 
        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-       xmlns:local="clr-namespace:XamarinApp.Views"
        xmlns:local2="clr-namespace:XamarinApp.Views.Fodders"
-       xmlns:local3="clr-namespace:XamarinApp.Views.Pets"
+       xmlns:local3="clr-namespace:XamarinApp.Views.Pets" 
+       xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
        Title="XamarinApp"
        x:Class="XamarinApp.AppShell">
 
@@ -72,6 +72,8 @@
                     </VisualStateGroupList>
                 </Setter>
             </Style>
+            
+            <xct:InvertedBoolConverter x:Key="InvertedBoolConverter" />
         </ResourceDictionary>
     </Shell.Resources>
 
@@ -80,15 +82,25 @@
         FlyoutDisplayOptions="AsMultipleItems" will create a separate flyout item for each child element    
         https://docs.microsoft.com/dotnet/api/xamarin.forms.shellgroupitem.flyoutdisplayoptions?view=xamarin-forms
     -->
-    <FlyoutItem Title="О приложении" Icon="icon_about.png">
-        <ShellContent Route="AboutPage" ContentTemplate="{DataTemplate local:AboutPage}" />
-    </FlyoutItem>
     <FlyoutItem Title="Питомцы" Icon="icon_feed.png">
         <ShellContent Route="PetsPage" ContentTemplate="{DataTemplate local3:PetsPage}" />
     </FlyoutItem>
     <FlyoutItem Title="Корма" Icon="icon_feed.png">
         <ShellContent Route="FoddersPage" ContentTemplate="{DataTemplate local2:FoddersPage}" />
     </FlyoutItem>
+    <MenuItem  Text="Войти"
+               Icon="icon_feed.png"
+               IsEnabled="{Binding IsAuthenticated}"
+               Command="{Binding GoToLoginCommand}" />
+    <MenuItem  Text="Зарегистрироваться"
+               Icon="icon_feed.png"
+               IsEnabled="{Binding IsAuthenticated}"
+               Command="{Binding GoToSignInCommand}" />
+    <MenuItem Text="Выйти" 
+              Icon="icon_feed.png" 
+              IsEnabled="{Binding IsAuthenticated, Converter={StaticResource InvertedBoolConverter}}" 
+              Command="{Binding LogoutCommand}"/>
+
 
     <!-- Optional Templates 
     // These may be provided inline as below or as separate classes.

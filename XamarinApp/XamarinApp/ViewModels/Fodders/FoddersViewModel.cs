@@ -7,6 +7,7 @@ using Xamarin.Forms;
 using Data.Context;
 using Data.Models;
 using XamarinApp.Views.Fodders;
+using XamarinApp.ViewModels.Base;
 
 namespace XamarinApp.ViewModels.Fodders
 {
