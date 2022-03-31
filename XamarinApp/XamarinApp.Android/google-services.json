@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "858222077535",
+    "project_id": "xamarinapp-7d69c",
+    "storage_bucket": "xamarinapp-7d69c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:858222077535:android:dd4e5b51778e4e3fe7ddea",
+        "android_client_info": {
+          "package_name": "com.royaljackal.xamarinapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "858222077535-pj0hov2ks5dvku1urmb4mgekghp4nqb6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBdDdaAF-Mlmi5Ipq8O85w9kxJ4Gn9g1Fs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "858222077535-pj0hov2ks5dvku1urmb4mgekghp4nqb6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
