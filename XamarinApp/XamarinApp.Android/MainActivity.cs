@@ -24,7 +24,6 @@ namespace XamarinApp.Droid
             LoadApplication(new App());
 
             SetUpPush();
-            LoadToken();
         }
 
         private void SetUpPush()
@@ -48,20 +47,22 @@ namespace XamarinApp.Droid
 #endif
 
             //Handle notification when app is closed here
-            var a = CrossFirebasePushNotification.Current.Token;
+            Token = CrossFirebasePushNotification.Current.Token;
+            CrossFirebasePushNotification.Current.OnTokenRefresh += OnTokenRefresh;
             CrossFirebasePushNotification.Current.OnNotificationReceived += OnNotificationReceived;
+        }
+
+        private void OnTokenRefresh(object source, FirebasePushNotificationTokenEventArgs e)
+        {
+            Token = e.Token;
+            Console.WriteLine(Token);
         }
 
         private void OnNotificationReceived(object source, FirebasePushNotificationDataEventArgs e)
         {
             Console.WriteLine(e.Data);
         }
-
-        private void LoadToken()
-        {
-            //TODO
-            //Token = FirebaseInstanceId.Instance.Token;
-        }
+        
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
         {
             Xamarin.Essentials.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
