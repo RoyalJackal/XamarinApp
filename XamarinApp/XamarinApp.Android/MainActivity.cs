@@ -47,15 +47,8 @@ namespace XamarinApp.Droid
 #endif
 
             //Handle notification when app is closed here
-            Token = CrossFirebasePushNotification.Current.Token;
-            CrossFirebasePushNotification.Current.OnTokenRefresh += OnTokenRefresh;
+            
             CrossFirebasePushNotification.Current.OnNotificationReceived += OnNotificationReceived;
-        }
-
-        private void OnTokenRefresh(object source, FirebasePushNotificationTokenEventArgs e)
-        {
-            Token = e.Token;
-            Console.WriteLine(Token);
         }
 
         private void OnNotificationReceived(object source, FirebasePushNotificationDataEventArgs e)

@@ -10,6 +10,8 @@ namespace Data.Models
         public string Name { get; set; }
 
         public string Breed { get; set; }
+        
+        public string Image { get; set; }
 
         public List<Feed> Feeds { get; set; }
     }

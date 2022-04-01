@@ -5,6 +5,7 @@
              Shell.PresentationMode="ModalAnimated"
              Title="Добавить питомца"
              xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
+             xmlns:xamarinApp="clr-namespace:XamarinApp;assembly=XamarinApp"
              ios:Page.UseSafeArea="true">
     <ContentPage.Content>
         <StackLayout Spacing="3" Padding="15">
@@ -12,6 +13,17 @@
             <Entry Text="{Binding Name, Mode=TwoWay}" FontSize="Medium" />
             <Label Text="Порода" FontSize="Medium" />
             <Entry Text="{Binding Breed, Mode=TwoWay}" FontSize="Medium" />
+            <Label Text="Фото" FontSize="Medium" />
+            <Image 
+                WidthRequest="{Binding Source={x:Static xamarinApp:App.ScreenWidth}}"
+                HeightRequest="{Binding Source={x:Static xamarinApp:App.QuarterScreenHeight}}">
+                <Image.Source>
+                    <FileImageSource File="{Binding Image}" />
+                </Image.Source>
+            </Image>
+            <StackLayout Orientation="Horizontal">
+                <Button Text="Сделать фото" Command="{Binding NewImageCommand}" HorizontalOptions="FillAndExpand"></Button>
+            </StackLayout>
             <StackLayout Orientation="Horizontal">
                 <Button Text="Отменить" Command="{Binding CancelCommand}" HorizontalOptions="FillAndExpand"></Button>
                 <Button Text="Сохранить" Command="{Binding SaveCommand}" HorizontalOptions="FillAndExpand"></Button>

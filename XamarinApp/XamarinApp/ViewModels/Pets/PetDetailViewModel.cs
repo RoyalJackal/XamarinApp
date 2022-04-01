@@ -32,6 +32,13 @@ namespace XamarinApp.ViewModels.Pets
             get => breed;
             set => SetProperty(ref breed, value);
         }
+        
+        private string image;
+        public string Image
+        {
+            get => image;
+            set => SetProperty(ref image, value);
+        }
 
         private int itemId;
         public int ItemId
@@ -66,6 +73,7 @@ namespace XamarinApp.ViewModels.Pets
             {
                 Name = item.Name;
                 Breed = item.Breed;
+                Image = item.Image;
             }
         }
 
