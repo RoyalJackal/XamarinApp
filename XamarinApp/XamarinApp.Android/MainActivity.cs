@@ -4,6 +4,9 @@ using Android.App;
 using Android.Content.PM;
 using Android.Runtime;
 using Android.OS;
+using Firebase;
+using Firebase.Iid;
+using Firebase.Messaging;
 using Plugin.FirebasePushNotification;
 
 namespace XamarinApp.Droid
@@ -11,6 +14,7 @@ namespace XamarinApp.Droid
     [Activity(Label = "XamarinApp", Icon = "@mipmap/icon", Theme = "@style/MainTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation | ConfigChanges.UiMode | ConfigChanges.ScreenLayout | ConfigChanges.SmallestScreenSize )]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
+        public string Token { get; set; }
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
@@ -20,6 +24,7 @@ namespace XamarinApp.Droid
             LoadApplication(new App());
 
             SetUpPush();
+            LoadToken();
         }
 
         private void SetUpPush()
@@ -50,6 +55,12 @@ namespace XamarinApp.Droid
         private void OnNotificationReceived(object source, FirebasePushNotificationDataEventArgs e)
         {
             Console.WriteLine(e.Data);
+        }
+
+        private void LoadToken()
+        {
+            //TODO
+            //Token = FirebaseInstanceId.Instance.Token;
         }
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
         {

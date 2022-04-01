@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:858222077535:android:dd4e5b51778e4e3fe7ddea",
+        "mobilesdk_app_id": "1:858222077535:android:c1ad3a190c4af1eee7ddea",
         "android_client_info": {
-          "package_name": "com.royaljackal.xamarinapp"
+          "package_name": "com.companyname.xamarinapp"
         }
       },
       "oauth_client": [

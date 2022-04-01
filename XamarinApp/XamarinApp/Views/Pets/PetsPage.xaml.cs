@@ -1,4 +1,5 @@
-﻿using Xamarin.Forms;
+﻿using System;
+using Xamarin.Forms;
 using XamarinApp.ViewModels.Pets;
 using XamarinApp.Views.Base;
 
