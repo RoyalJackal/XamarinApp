@@ -12,47 +12,55 @@
     </ContentPage.ToolbarItems>
 
     <RefreshView x:DataType="local:PetDetailViewModel" Command="{Binding LoadItemsCommand}" IsRefreshing="{Binding IsBusy, Mode=TwoWay}">
-        <StackLayout Spacing="20" Padding="15">
-            <Label Text="Имя:" FontSize="Medium" />
-            <Label Text="{Binding Name}" FontSize="Small"/>
-            <Label Text="Порода:" FontSize="Medium" />
-            <Label Text="{Binding Breed}" FontSize="Small"/>
-            <Label Text="Фото:" FontSize="Medium" />
-            <Image 
-                WidthRequest="{Binding Source={x:Static xamarinApp:App.ScreenWidth}}"
-                HeightRequest="{Binding Source={x:Static xamarinApp:App.QuarterScreenHeight}}">
-                <Image.Source>
-                    <FileImageSource File="{Binding Image}" />
-                </Image.Source>
-            </Image>
-            <Label Text="Кормления:" FontSize="Medium" />
-            <CollectionView x:Name="PetDetailViewModel"
-                ItemsSource="{Binding Items}"
-                SelectionMode="None">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <StackLayout Padding="10" x:DataType="model:Feed">
-                            <Label Text="{Binding Time, StringFormat='{0:hh\\:mm}'}" 
-                            LineBreakMode="NoWrap" 
-                            Style="{DynamicResource ListItemTextStyle}" 
-                            FontSize="16" />
-                            <Label Text="{Binding Fodder.Name}" 
-                            LineBreakMode="NoWrap" 
-                            Style="{DynamicResource ListItemDetailTextStyle}" 
-                            FontSize="13" />
-                            <StackLayout.GestureRecognizers>
-                                <TapGestureRecognizer 
-                                NumberOfTapsRequired="1"
-                                Command="{Binding Source={RelativeSource AncestorType={x:Type local:PetDetailViewModel}}, Path=ItemTapped}"		
-                                CommandParameter="{Binding .}">
-                                </TapGestureRecognizer>
-                            </StackLayout.GestureRecognizers>
-                        </StackLayout>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
-            <Button Text="Редактировать" Command="{Binding EditCommand}" HorizontalOptions="FillAndExpand"></Button>
-        </StackLayout>
+        <ScrollView>
+            <StackLayout Spacing="20" Padding="15">
+                <Label Text="Имя:" FontSize="Medium" />
+                <Label Text="{Binding Name}" FontSize="Small"/>
+                <Label Text="Порода:" FontSize="Medium" />
+                <Label Text="{Binding Breed}" FontSize="Small"/>
+                <Label Text="Фото:" FontSize="Medium" />
+                <Image 
+                    WidthRequest="{Binding Source={x:Static xamarinApp:App.ScreenWidth}}"
+                    HeightRequest="{Binding Source={x:Static xamarinApp:App.QuarterScreenHeight}}">
+                    <Image.Source>
+                        <FileImageSource File="{Binding Image}" />
+                    </Image.Source>
+                </Image>
+                <Label Text="Аудио" FontSize="Medium" />
+                <Label Text="{Binding Audio}" FontSize="Medium" />
+                <StackLayout Orientation="Horizontal">
+                    <Button Text="Воспроизвести" Command="{Binding PlayAudioCommand}" HorizontalOptions="FillAndExpand"></Button>
+                    <Button Text="Стоп" Command="{Binding StopAudioCommand}" HorizontalOptions="FillAndExpand"></Button>
+                </StackLayout>
+                <Label Text="Кормления:" FontSize="Medium" />
+                <CollectionView x:Name="PetDetailViewModel"
+                    ItemsSource="{Binding Items}"
+                    SelectionMode="None">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <StackLayout Padding="10" x:DataType="model:Feed">
+                                <Label Text="{Binding Time, StringFormat='{0:hh\\:mm}'}" 
+                                LineBreakMode="NoWrap" 
+                                Style="{DynamicResource ListItemTextStyle}" 
+                                FontSize="16" />
+                                <Label Text="{Binding Fodder.Name}" 
+                                LineBreakMode="NoWrap" 
+                                Style="{DynamicResource ListItemDetailTextStyle}" 
+                                FontSize="13" />
+                                <StackLayout.GestureRecognizers>
+                                    <TapGestureRecognizer 
+                                    NumberOfTapsRequired="1"
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type local:PetDetailViewModel}}, Path=ItemTapped}"		
+                                    CommandParameter="{Binding .}">
+                                    </TapGestureRecognizer>
+                                </StackLayout.GestureRecognizers>
+                            </StackLayout>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+                <Button Text="Редактировать" Command="{Binding EditCommand}" HorizontalOptions="FillAndExpand"></Button>
+            </StackLayout>
+        </ScrollView>
     </RefreshView>
 
 </base:BasePage>

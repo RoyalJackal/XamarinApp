@@ -12,6 +12,8 @@ namespace Data.Models
         public string Breed { get; set; }
         
         public string Image { get; set; }
+        
+        public string Audio { get; set; }
 
         public List<Feed> Feeds { get; set; }
     }

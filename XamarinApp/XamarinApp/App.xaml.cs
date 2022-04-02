@@ -22,6 +22,7 @@ namespace XamarinApp
             DependencyService.Register<AuthService>();
             DependencyService.Register<AlertService>();
             DependencyService.Register<MediaService>();
+            DependencyService.RegisterSingleton(new AudioService());
             InitializeComponent();
 
             MainPage = new AppShell();

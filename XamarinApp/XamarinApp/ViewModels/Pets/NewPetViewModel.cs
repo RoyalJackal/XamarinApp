@@ -12,7 +12,10 @@ namespace XamarinApp.ViewModels.Pets
     class NewPetViewModel : BaseViewModel
     {
         public AppDbContext Db => DependencyService.Get<AppDbContext>();
+        public AlertService Alerts => DependencyService.Get<AlertService>();
         public MediaService Media => DependencyService.Get<MediaService>();
+        public AudioService AudioService => DependencyService.Get<AudioService>();
+
 
 
         private string name;
@@ -35,7 +38,14 @@ namespace XamarinApp.ViewModels.Pets
             get => image;
             set => SetProperty(ref image, value);
         }
-
+        
+        private string audio;
+        public string Audio
+        {
+            get => audio;
+            set => SetProperty(ref audio, value);
+        }
+        
         private int itemId;
         public int ItemId
         {
@@ -56,14 +66,19 @@ namespace XamarinApp.ViewModels.Pets
             SaveCommand = new Command(OnSave, ValidateSave);
             CancelCommand = new Command(OnCancel);
             NewImageCommand = new Command(GetNewImage);
-            PropertyChanged +=
-                (_, __) => SaveCommand.ChangeCanExecute();
+            RecordAudioCommand = new Command(OnRecordAudio);
+            PlayAudioCommand = new Command(OnPlayAudio);
+            StopAudioCommand = new Command(OnStopAudio);
+            PropertyChanged += (_, __) => SaveCommand.ChangeCanExecute();
         }
 
         public Command SaveCommand { get; }
         public Command CancelCommand { get; }
-        
         public Command NewImageCommand { get; }
+        public Command RecordAudioCommand { get; }
+        public Command PlayAudioCommand { get; }
+        public Command StopAudioCommand { get; }
+
 
         public async void LoadItemId(int itemId)
         {
@@ -76,6 +91,7 @@ namespace XamarinApp.ViewModels.Pets
                 Name = item.Name;
                 Breed = item.Breed;
                 Image = item.Image;
+                Audio = item.Audio;
             }
         }
 
@@ -92,10 +108,12 @@ namespace XamarinApp.ViewModels.Pets
         {            
             if (ItemId == default)
             {
-                var pet = new Pet()
+                var pet = new Pet
                 {
                     Name = Name,
-                    Breed = Breed
+                    Breed = Breed,
+                    Image = Image,
+                    Audio = Audio
                 };
                 await Db.AddAsync(pet);
             }
@@ -105,6 +123,7 @@ namespace XamarinApp.ViewModels.Pets
                 pet.Name = Name;
                 pet.Breed = Breed;
                 pet.Image = Image;
+                pet.Audio = Audio;
             }
             await Db.SaveChangesAsync();
 
@@ -116,5 +135,47 @@ namespace XamarinApp.ViewModels.Pets
         {
             Image = await Media.TakePhotoAsync();
         }
+
+        public async void OnRecordAudio()
+        {
+            try
+            {
+                if (!AudioService.Recorder.IsRecording) //Record button clicked
+                {
+                    //start recording audio
+                    var audioRecordTask = await AudioService.Recorder.StartRecording ();
+
+                    await audioRecordTask;
+                }
+                else //Stop button clicked
+                {
+                    //stop the recording...
+                    await AudioService.Recorder.StopRecording();
+                    Audio = AudioService.Recorder.GetAudioFilePath();
+                }
+            }
+            catch (Exception ex)
+            {
+                await Alerts.ShowErrorAsync(ex.Message);
+            }
+        }
+
+        public async void OnPlayAudio()
+        {
+            try
+            {
+                if (Audio != null)
+                {
+                    AudioService.Player.Play(Audio);
+                }
+            }
+            catch (Exception ex)
+            {
+                await Alerts.ShowErrorAsync(ex.Message);
+            }
+        }
+
+        public void OnStopAudio() =>
+            AudioService.Player.Pause();
     }
 }

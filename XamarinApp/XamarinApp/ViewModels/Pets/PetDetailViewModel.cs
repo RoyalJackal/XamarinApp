@@ -10,6 +10,7 @@ using Data.Context;
 using Data.Models;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using XamarinApp.Services;
 using XamarinApp.ViewModels.Base;
 
 namespace XamarinApp.ViewModels.Pets
@@ -18,6 +19,10 @@ namespace XamarinApp.ViewModels.Pets
     class PetDetailViewModel : BaseViewModel
     {
         public AppDbContext Db => DependencyService.Get<AppDbContext>();
+        public AlertService Alerts => DependencyService.Get<AlertService>();
+
+        public AudioService AudioService => DependencyService.Get<AudioService>();
+
 
         private string name;
         public string Name
@@ -38,6 +43,13 @@ namespace XamarinApp.ViewModels.Pets
         {
             get => image;
             set => SetProperty(ref image, value);
+        }
+        
+        private string audio;
+        public string Audio
+        {
+            get => audio;
+            set => SetProperty(ref audio, value);
         }
 
         private int itemId;
@@ -61,6 +73,8 @@ namespace XamarinApp.ViewModels.Pets
             EditCommand = new Command(OnEdit);
             ItemTapped = new Command<Feed>(OnItemSelected);
             AddItemCommand = new Command(OnAddItem);
+            PlayAudioCommand = new Command(OnPlayAudio);
+            StopAudioCommand = new Command(OnStopAudio);
         }
 
         public async void LoadItemId(int itemId)
@@ -74,13 +88,34 @@ namespace XamarinApp.ViewModels.Pets
                 Name = item.Name;
                 Breed = item.Breed;
                 Image = item.Image;
+                Audio = item.Audio;
             }
         }
 
         public Command EditCommand { get; }
+        public Command PlayAudioCommand { get; }
+        public Command StopAudioCommand { get; }
 
         public async void OnEdit() =>
             await Shell.Current.GoToAsync($"{nameof(NewPetPage)}?{nameof(NewPetViewModel.ItemId)}={ItemId}");
+        
+        public async void OnPlayAudio()
+        {
+            try
+            {
+                if (Audio != null)
+                {
+                    AudioService.Player.Play(Audio);
+                }
+            }
+            catch (Exception ex)
+            {
+                await Alerts.ShowErrorAsync(ex.Message);
+            }
+        }
+
+        public void OnStopAudio() =>
+            AudioService.Player.Pause();
 
         #region FeedList
 

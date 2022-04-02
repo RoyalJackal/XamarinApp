@@ -1,9 +1,11 @@
 ﻿using System;
-
+using Android;
 using Android.App;
 using Android.Content.PM;
 using Android.Runtime;
 using Android.OS;
+using Android.Support.V4.Content;
+using AndroidX.Core.App;
 using Firebase;
 using Firebase.Iid;
 using Firebase.Messaging;
@@ -23,6 +25,7 @@ namespace XamarinApp.Droid
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
             LoadApplication(new App());
 
+            AddPermissions();
             SetUpPush();
         }
 
@@ -61,6 +64,26 @@ namespace XamarinApp.Droid
             Xamarin.Essentials.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
 
             base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+
+        private void AddPermissions()
+        {
+            if (ContextCompat.CheckSelfPermission (this, Manifest.Permission.RecordAudio) != Permission.Granted)
+            {
+                ActivityCompat.RequestPermissions (this, new String [] { Manifest.Permission.RecordAudio }, 1);
+            }
+            if (ContextCompat.CheckSelfPermission (this, Manifest.Permission.ManageExternalStorage) != Permission.Granted)
+            {
+                ActivityCompat.RequestPermissions (this, new String [] { Manifest.Permission.ManageExternalStorage }, 1);
+            }
+            if (ContextCompat.CheckSelfPermission (this, Manifest.Permission.ReadExternalStorage) != Permission.Granted)
+            {
+                ActivityCompat.RequestPermissions (this, new String [] { Manifest.Permission.ReadExternalStorage }, 1);
+            }
+            if (ContextCompat.CheckSelfPermission (this, Manifest.Permission.WriteExternalStorage) != Permission.Granted)
+            {
+                ActivityCompat.RequestPermissions (this, new String [] { Manifest.Permission.WriteExternalStorage }, 1);
+            }
         }
     }
 }
