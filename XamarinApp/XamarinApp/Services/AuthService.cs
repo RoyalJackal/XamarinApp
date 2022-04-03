@@ -14,6 +14,8 @@ namespace XamarinApp.Services
 {
     public class AuthService
     {
+        public AlertService Alerts => DependencyService.Get<AlertService>();
+
         private const string AuthUsername = "AuthUsername";
         private const string AuthToken = "AuthToken";
         private const string AuthTokenExpiration = "AuthTokenExpiration";
@@ -57,8 +59,9 @@ namespace XamarinApp.Services
 
                 return true;
             }
-            catch
+            catch (Exception ex)
             {
+                await Alerts.ShowErrorAsync(ex.Message);
                 return false;
             }
         }
@@ -86,8 +89,9 @@ namespace XamarinApp.Services
 
                 return true;
             }
-            catch
+            catch (Exception ex)
             {
+                await Alerts.ShowErrorAsync(ex.Message);
                 return false;
             }
         }

@@ -24,6 +24,11 @@ namespace XamarinApp.ViewModels
             set => SetProperty(ref isAuthenticated, value);
         }
 
+        public bool IsNotAuthenticated
+        {
+            get => !isAuthenticated;
+        }
+
         public AppShellViewModel()
         {
             var authTask = Auth.IsAuthenticated();

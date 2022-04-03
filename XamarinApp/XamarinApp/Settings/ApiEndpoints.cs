@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Xamarin.Essentials;
 
 namespace XamarinApp.Settings
 {
@@ -10,8 +11,7 @@ namespace XamarinApp.Settings
 
         public ApiEndpoints()
         {
-            _baseUrl = "https://localhost:44382";
-            //_baseUrl = "https://192.168.0.101:5000";
+            _baseUrl = DeviceInfo.Platform == DevicePlatform.Android ? "http://10.0.2.2:5000" : "https://localhost:5000";
         }
 
         public string AuthSignUp => $"{_baseUrl}/Auth/SignUp";

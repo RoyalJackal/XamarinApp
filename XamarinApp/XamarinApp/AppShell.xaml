@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Shell xmlns="http://xamarin.com/schemas/2014/forms" 
        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+       xmlns:local="clr-namespace:XamarinApp.Views.Auth" 
        xmlns:local2="clr-namespace:XamarinApp.Views.Fodders"
        xmlns:local3="clr-namespace:XamarinApp.Views.Pets" 
        xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
@@ -88,14 +89,12 @@
     <FlyoutItem Title="Корма" Icon="icon_feed.png">
         <ShellContent Route="FoddersPage" ContentTemplate="{DataTemplate local2:FoddersPage}" />
     </FlyoutItem>
-    <MenuItem  Text="Войти"
-               Icon="icon_feed.png"
-               IsEnabled="{Binding IsAuthenticated}"
-               Command="{Binding GoToLoginCommand}" />
-    <MenuItem  Text="Зарегистрироваться"
-               Icon="icon_feed.png"
-               IsEnabled="{Binding IsAuthenticated}"
-               Command="{Binding GoToSignInCommand}" />
+    <FlyoutItem Title="Войти" Icon="icon_feed.png" IsVisible="{Binding IsNotAuthenticated}">
+        <ShellContent Route="LogInPage" ContentTemplate="{DataTemplate local:LogInPage}" />
+    </FlyoutItem>
+    <FlyoutItem Title="Зарегистрироваться" Icon="icon_feed.png" IsVisible="{Binding IsNotAuthenticated}">
+        <ShellContent Route="SignInPage" ContentTemplate="{DataTemplate local:SignInPage}" />
+    </FlyoutItem>
     <MenuItem Text="Выйти" 
               Icon="icon_feed.png" 
               IsEnabled="{Binding IsAuthenticated, Converter={StaticResource InvertedBoolConverter}}" 
