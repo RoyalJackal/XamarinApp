@@ -2,6 +2,7 @@
 using Xamarin.Forms;
 using Data.Context;
 using Plugin.FirebasePushNotification;
+using Plugin.LocalNotification;
 using Xamarin.Essentials;
 using XamarinApp.Settings;
 using XamarinApp.Services;
@@ -10,7 +11,6 @@ namespace XamarinApp
 {
     public partial class App : Application
     {
-        public string FirebaseToken { get; set; }
         public static double ScreenWidth = DeviceDisplay.MainDisplayInfo.Width / DeviceDisplay.MainDisplayInfo.Density;
         public static double ScreenHeight = DeviceDisplay.MainDisplayInfo.Height / DeviceDisplay.MainDisplayInfo.Density;
         public static double QuarterScreenHeight = ScreenHeight / 5;
@@ -22,6 +22,7 @@ namespace XamarinApp
             DependencyService.Register<AuthService>();
             DependencyService.Register<AlertService>();
             DependencyService.Register<MediaService>();
+            DependencyService.Register<NotificationService>();
             DependencyService.RegisterSingleton(new AudioService());
             InitializeComponent();
 
@@ -34,7 +35,6 @@ namespace XamarinApp
             if (uri != null)
                 await Shell.Current.GoToAsync(uri);
             
-            FirebaseToken = CrossFirebasePushNotification.Current.Token;
             CrossFirebasePushNotification.Current.OnTokenRefresh += OnTokenRefresh;
         }
         protected override void OnSleep()
@@ -44,10 +44,22 @@ namespace XamarinApp
         protected override void OnResume()
         {
         }
-        
-        private void OnTokenRefresh(object source, FirebasePushNotificationTokenEventArgs e)
+
+        public async void OnTokenRefresh(object source, FirebasePushNotificationTokenEventArgs e)
         {
-            FirebaseToken = e.Token;
+            await DependencyService.Get<AuthService>().EnsureDeviceTokenUpdated(e.Token);
+        }
+
+        public async void OnNotificationReceived(object source, FirebasePushNotificationDataEventArgs e)
+        {
+            if (!e.Data.TryGetValue("title", out var title) || !e.Data.TryGetValue("body", out var body))
+                return;
+
+            await NotificationCenter.Current.Show(notification => notification
+                .WithTitle(title as string)
+                .WithDescription(body as string)
+                .WithNotificationId(new Random().Next())
+                .Create());
         }
     }
 }

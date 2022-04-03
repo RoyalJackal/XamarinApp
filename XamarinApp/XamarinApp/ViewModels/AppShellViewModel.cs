@@ -53,7 +53,7 @@ namespace XamarinApp.ViewModels
 
         private async void OnLogoutClicked(object obj)
         {
-            Auth.Exit();
+            await Auth.Exit();
             IsAuthenticated = false;
             await Shell.Current.GoToAsync($"{nameof(LogInPage)}");
         }

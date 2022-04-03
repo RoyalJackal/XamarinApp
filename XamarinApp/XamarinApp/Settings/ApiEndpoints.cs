@@ -5,16 +5,22 @@ using Xamarin.Essentials;
 
 namespace XamarinApp.Settings
 {
-    class ApiEndpoints
+    public class ApiEndpoints
     {
         private readonly string _baseUrl;
 
         public ApiEndpoints()
         {
-            _baseUrl = DeviceInfo.Platform == DevicePlatform.Android ? "http://10.0.2.2:5000" : "https://localhost:5000";
+            _baseUrl = "http://192.168.1.60:5000";
+            //_baseUrl = DeviceInfo.Platform == DevicePlatform.Android ? "https://10.0.2.2:5000" : "https://localhost:5000";
         }
 
         public string AuthSignUp => $"{_baseUrl}/Auth/SignUp";
         public string AuthSignIn => $"{_baseUrl}/Auth/SignIn";
+        
+        public string NotifierGetNotifiers => $"{_baseUrl}/Notification/GetNotifications";
+        public string NotifierAddNotifier => $"{_baseUrl}/Notification/AddNotification";
+        public string NotifierAddToken => $"{_baseUrl}/Notification/AddToken";
+        public string NotifierRemoveToken => $"{_baseUrl}/Notification/RemoveToken";
     }
 }

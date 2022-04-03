@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Server.Models;
 
 namespace Server.Data
 {
@@ -9,6 +10,9 @@ namespace Server.Data
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
         }
+        
+        public DbSet<Notification> Notifications { get; set; }
+        public DbSet<FirebaseToken> FirebaseTokens { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

@@ -49,16 +49,11 @@ namespace XamarinApp.Droid
             FirebasePushNotificationManager.Initialize(this,false);
 #endif
 
-            //Handle notification when app is closed here
-            
-            CrossFirebasePushNotification.Current.OnNotificationReceived += OnNotificationReceived;
+            var app = (App)Xamarin.Forms.Application.Current;
+            CrossFirebasePushNotification.Current.OnTokenRefresh += app.OnTokenRefresh;
+            CrossFirebasePushNotification.Current.OnNotificationReceived += app.OnNotificationReceived;
         }
 
-        private void OnNotificationReceived(object source, FirebasePushNotificationDataEventArgs e)
-        {
-            Console.WriteLine(e.Data);
-        }
-        
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
         {
             Xamarin.Essentials.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);

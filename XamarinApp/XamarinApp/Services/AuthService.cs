@@ -7,6 +7,7 @@ using Xamarin.Essentials;
 using XamarinApp.Helpers;
 using System.Net.Http;
 using System.Net.Http.Json;
+using Plugin.FirebasePushNotification;
 using XamarinApp.Settings;
 using Xamarin.Forms;
 
@@ -17,17 +18,14 @@ namespace XamarinApp.Services
         public AlertService Alerts => DependencyService.Get<AlertService>();
 
         private const string AuthUsername = "AuthUsername";
-        private const string AuthToken = "AuthToken";
+        public const string AuthToken = "AuthToken";
         private const string AuthTokenExpiration = "AuthTokenExpiration";
+        private const string FirebaseToken = "FirebaseToken";
 
-        private readonly ApiEndpoints _endpoints;
+        private readonly ApiEndpoints _endpoints = DependencyService.Get<ApiEndpoints>();
+        private readonly NotificationService _notifications = DependencyService.Get<NotificationService>();
 
-        public AuthService()
-        {
-            _endpoints = DependencyService.Get<ApiEndpoints>();
-        }
-
-        public async Task<string> GetToken() => await SecureStorage.GetAsync(AuthToken);
+        public static async Task<string> GetToken() => await SecureStorage.GetAsync(AuthToken);
 
         public async Task<DateTimeOffset> GetTokenExpiration() =>
             DateTimeOffset.Parse(await SecureStorage.GetAsync(AuthTokenExpiration));
@@ -56,6 +54,8 @@ namespace XamarinApp.Services
                 await SecureStorage.SetAsync(AuthToken, tokenDto.Token);
                 await SecureStorage.SetAsync(AuthTokenExpiration, tokenDto.Expiration.ToString());
                 await SecureStorage.SetAsync(AuthUsername, tokenDto.UserName);
+                
+                await EnsureDeviceTokenUpdated();
 
                 return true;
             }
@@ -86,6 +86,8 @@ namespace XamarinApp.Services
                 await SecureStorage.SetAsync(AuthToken, tokenDto.Token);
                 await SecureStorage.SetAsync(AuthUsername, tokenDto.UserName);
                 await SecureStorage.SetAsync(AuthTokenExpiration, tokenDto.Expiration.ToString());
+                
+                await EnsureDeviceTokenUpdated();
 
                 return true;
             }
@@ -96,11 +98,37 @@ namespace XamarinApp.Services
             }
         }
 
-        public void Exit()
+        public async Task Exit()
         {
+            await EnsureDeviceTokenRemoved();
+            
             SecureStorage.Remove(AuthToken);
             SecureStorage.Remove(AuthUsername);
             SecureStorage.Remove(AuthTokenExpiration);
+        }
+        
+        public async Task EnsureDeviceTokenUpdated(string newToken = null)
+        {
+            if(!await IsAuthenticated())
+                return;
+            await EnsureDeviceTokenRemoved();
+
+            if (newToken == null)
+                newToken = CrossFirebasePushNotification.Current.Token;
+
+            await _notifications.AddToken(newToken);
+            await SecureStorage.SetAsync(FirebaseToken, newToken);
+        }
+        public async Task EnsureDeviceTokenRemoved()
+        {
+            if(!await IsAuthenticated())
+                return;
+            var oldDeviceToken = await SecureStorage.GetAsync(FirebaseToken);
+            if (oldDeviceToken != null)
+            {
+                await _notifications.RemoveToken(oldDeviceToken);
+                SecureStorage.Remove(FirebaseToken);
+            }
         }
     }
 }

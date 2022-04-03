@@ -10,6 +10,7 @@ using Data.Context;
 using Data.Models;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using Shared.Dto;
 using XamarinApp.Services;
 using XamarinApp.ViewModels.Base;
 
@@ -20,8 +21,9 @@ namespace XamarinApp.ViewModels.Pets
     {
         public AppDbContext Db => DependencyService.Get<AppDbContext>();
         public AlertService Alerts => DependencyService.Get<AlertService>();
-
         public AudioService AudioService => DependencyService.Get<AudioService>();
+        public NotificationService Notifications => DependencyService.Get<NotificationService>();
+
 
 
         private string name;
@@ -75,6 +77,7 @@ namespace XamarinApp.ViewModels.Pets
             AddItemCommand = new Command(OnAddItem);
             PlayAudioCommand = new Command(OnPlayAudio);
             StopAudioCommand = new Command(OnStopAudio);
+            CreateNotification = new Command<Feed>(OnNewNotification);
         }
 
         public async void LoadItemId(int itemId)
@@ -125,6 +128,7 @@ namespace XamarinApp.ViewModels.Pets
         public Command LoadItemsCommand { get; }
         public Command AddItemCommand { get; }
         public Command<Feed> ItemTapped { get; }
+        public Command<Feed> CreateNotification { get; }
 
         async Task ExecuteLoadItemsCommand()
         {
@@ -177,6 +181,20 @@ namespace XamarinApp.ViewModels.Pets
             if (item == null)
                 return;
             await Shell.Current.GoToAsync($"{nameof(FeedDetailPage)}?{nameof(FeedDetailViewModel.ItemId)}={item.Id}");
+        }
+
+        async void OnNewNotification(Feed item)
+        {
+            var date = DateTimeOffset.Now > DateTimeOffset.Now.Date + item.Time
+                ? DateTimeOffset.Now.Date + TimeSpan.FromDays(1) + item.Time
+                : DateTimeOffset.Now.Date + item.Time;
+            var newNotification = new NotificationDto
+            {
+                Text = $"Вам нужно покормить вашего питомца {item.Pet.Name}. Необходимо {item.Amount} г. корма {item.Fodder.Name}.",
+                DateTime = new DateTimeOffset(date.Year, date.Month, date.Day, date.Hour, date.Minute, date.Second, TimeZoneInfo.Local.BaseUtcOffset)
+            };
+
+            await Notifications.AddNotification(newNotification);
         }
 
         #endregion

@@ -47,6 +47,10 @@
                                 LineBreakMode="NoWrap" 
                                 Style="{DynamicResource ListItemDetailTextStyle}" 
                                 FontSize="13" />
+                                <Button Text="Создать уведомление" 
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type local:PetDetailViewModel}}, Path = CreateNotification}" 
+                                        CommandParameter="{Binding .}"
+                                        HorizontalOptions="FillAndExpand"></Button>
                                 <StackLayout.GestureRecognizers>
                                     <TapGestureRecognizer 
                                     NumberOfTapsRequired="1"
